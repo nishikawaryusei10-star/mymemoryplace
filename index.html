@@ -165,17 +165,18 @@ function getLineup(teamName) {
     let sorted = [...r].sort((a,b) => {
         let aF = a.stamina < a.restThreshold && Math.random() < 0.35;
         let bF = b.stamina < b.restThreshold && Math.random() < 0.35;
-        if (Math.random() < 0.015) aF = true; // 隨機輪休機率
+        if (Math.random() < 0.005) aF = true;
+        //隨機輪休機率
         if (aF !== bF) return aF ? 1 : -1;
         return tierBase[b.tier] - tierBase[a.tier];
     });
     let starters = sorted.slice(0, 9);
     let bench = sorted.slice(9);
     starters.forEach(p => {
-        let loss = ["SSR","SR","S"].includes(p.tier) ? (3.5 + Math.random()*2.5) : (6 + Math.random()*3);
+        let loss = ["SSR","SR","S","A"].includes(p.tier) ? (2 + Math.random()*1.5) : (5 + Math.random()*2.5);
         p.stamina = Math.max(0, p.stamina - loss);
     });
-    bench.forEach(p => p.stamina = Math.min(100, p.stamina + 35));
+    bench.forEach(p => p.stamina = Math.min(100, p.stamina + 20));
     return starters;
 }
 
