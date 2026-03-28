@@ -2,194 +2,251 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>世界觀資料庫</title>
-
+<title>室內棒球聯盟 v4.6.1 - 150場例行賽版</title>
 <style>
-body {
-  margin: 0;
-  font-family: "Noto Sans TC", sans-serif;
-  background: #eef1f5;
-  color: #222;
-}
-
-/* ===== 頂部 ===== */
-.header {
-  background: linear-gradient(135deg, #1e2a38, #2f3e52);
-  color: white;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 34px;
-  letter-spacing: 2px;
-}
-
-.header p {
-  margin-top: 10px;
-  opacity: 0.85;
-}
-
-/* ===== 主體 ===== */
-.container {
-  max-width: 1100px;
-  margin: -30px auto 40px auto;
-  padding: 20px;
-}
-
-/* ===== 卡片區 ===== */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-}
-
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-  transition: 0.25s;
-  position: relative;
-  overflow: hidden;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-/* 卡片左側色條 */
-.card::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 6px;
-  height: 100%;
-}
-
-/* 不同入口顏色 */
-.timeline::before {
-  background: #3b82f6;
-}
-
-.character::before {
-  background: #10b981;
-}
-
-.card a {
-  text-decoration: none;
-  font-size: 22px;
-  font-weight: bold;
-  color: #1e40af;
-}
-
-.card p {
-  margin-top: 10px;
-  color: #444;
-}
-
-/* ===== 區塊 ===== */
-.section {
-  margin-top: 35px;
-  background: white;
-  padding: 20px 25px;
-  border-radius: 14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.section h2 {
-  margin-top: 0;
-  border-left: 5px solid #3b82f6;
-  padding-left: 10px;
-}
-
-/* ===== 清單 ===== */
-ul {
-  padding-left: 20px;
-  line-height: 1.9;
-}
-
-a {
-  color: #2563eb;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* ===== 小細節 ===== */
-.tag {
-  display: inline-block;
-  background: #e0e7ff;
-  color: #3730a3;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  margin-left: 6px;
-}
+    body { font-family:"Noto Sans TC", sans-serif; background:#f0f2f5; margin:10px; color: #333; font-size: 12px;}
+    .container { max-width: 1700px; margin: auto; }
+    .controls { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; position: sticky; top: 10px; z-index: 100;}
+    button { padding:8px 12px; margin:2px; background:#003366; color:white; border:none; cursor:pointer; border-radius:4px; font-weight: bold;}
+    button:hover { background:#0055aa; }
+    .reset { background: #990000; }
+    table { border-collapse:collapse; width:100%; background:white; margin-bottom:30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+    th,td { border:1px solid #ddd; padding:4px; text-align:center; white-space: nowrap;}
+    th { background:#001a33; color:white; cursor:pointer; position: sticky; top: 0;}
+    tr:nth-child(even) { background: #f9f9f9; }
+    .tier-SSR { color: #ff0000; font-weight: bold; }
+    .tier-SR  { color: #ff8c00; font-weight: bold; }
+    .tier-S   { color: #d4af37; font-weight: bold; }
+    .div-header { background: #2c3e50 !important; color: white !important; font-weight: bold; text-align: left; padding-left: 15px !important; }
+    .stamina-bar-bg { width: 40px; height: 6px; background: #eee; border-radius: 3px; display: inline-block; }
+    .stamina-bar-fg { height: 100%; border-radius: 3px; }
 </style>
 </head>
-
 <body>
 
-<div class="header">
-  <h1>《你的世界名稱》</h1>
-  <p>一個持續演化的故事世界</p>
-</div>
-
 <div class="container">
-
-  <!-- 入口 -->
-  <div class="grid">
-
-    <div class="card timeline">
-      <a href="timeline.html">📜 編年體（時間線）</a>
-      <p>依照年份追蹤世界發展與重大事件。</p>
+    <div class="controls">
+        <b style="font-size:18px;">⚾ 模擬器 v4.6.1</b>
+        <button onclick="simulateGame()">模擬一場</button>
+        <button onclick="simulateDay()">模擬一天 (10場)</button>
+        <button onclick="simulateSeason(30)">模擬一個月 (300場)</button>
+        <button onclick="simulateComplete()">直接模擬完 150 場例行賽</button>
+        <button class="reset" onclick="resetSeason()">重置賽季</button>
+        <button onclick="saveData()">存檔</button>
+        <button onclick="loadData()">讀取</button>
+        <span id="seasonStatus" style="margin-left:20px; color:#c62828; font-weight:bold;">賽季進度：每隊 150 場例行賽</span>
     </div>
 
-    <div class="card character">
-      <a href="characters.html">👤 紀傳體（人物）</a>
-      <p>深入角色背景與其在歷史中的位置。</p>
+    <table id="standings"></table>
+    <div style="overflow-x: auto;">
+        <table id="hitters"></table>
     </div>
-
-  </div>
-
-  <!-- 世界觀 -->
-  <div class="section">
-    <h2>世界簡介</h2>
-    <p>
-      這裡寫你的世界觀，例如：年代、衝突、核心主題。
-      可以寫得有一點文學感，讓人一進來就有氣氛。
-    </p>
-  </div>
-
-  <!-- 更新 -->
-  <div class="section">
-    <h2>最近更新</h2>
-    <ul>
-      <li>
-        <a href="timeline/2026.html">2026年時間線</a>
-        <span class="tag">NEW</span>
-      </li>
-      <li>
-        <a href="characters/char_01.html">新增人物：某某</a>
-      </li>
-    </ul>
-  </div>
-
-  <!-- 快速入口 -->
-  <div class="section">
-    <h2>快速入口</h2>
-    <ul>
-      <li><a href="timeline/2050.html">2050年</a></li>
-      <li><a href="characters/char_01.html">主角人物</a></li>
-    </ul>
-  </div>
-
 </div>
 
+<script>
+const MAX_GAMES = 150;
+const divisions = {
+    "北區": ["味全天龍隊","富邦守護者隊","全聯熊隊","樂天桃猿隊","竹科工程師隊"],
+    "中區": ["苗栗石虎隊","中信子彈隊","北鐵狼隊","南投雷霆隊","台糖巨人隊"],
+    "南區": ["南亞炫風隊","統一猛獅隊","阿里山火車隊","台鋼巨鷹隊","墾丁鯊魚隊"],
+    "東區": ["花蓮眼鏡蛇隊","台東鋼鐵人隊","中油火焰隊","基隆雨都隊","奇醫海燕隊"]
+};
+
+// 屬性權重優化：讓 SSR 與 D 級有顯著差異，但不失隨機性
+const tierBase = { "SSR":0.96, "SR":0.88, "S":0.80, "A":0.72, "B":0.62, "C":0.48, "D":0.35, "E":0.15 };
+const typeBonus = {
+    "All-Around": { con:1.0, pow:1.0, eye:1.0, spd:1.0 },
+    "Contact":    { con:1.3, pow:0.4, eye:0.9, spd:1.1 },
+    "Power":      { con:0.6, pow:1.5, eye:0.8, spd:0.5 },
+    "Speed":      { con:0.9, pow:0.3, eye:0.8, spd:1.6 },
+    "OBP":        { con:0.8, pow:0.7, eye:1.6, spd:0.7 },
+    "Utility":    { con:0.7, pow:0.7, eye:0.7, spd:0.7 }
+};
+
+let teams = [];
+let rosters = {};
+
+function initData() {
+    teams = []; rosters = {};
+    Object.entries(divisions).forEach(([d, list]) => {
+        list.forEach(n => {
+            teams.push({name: n, division: d, win: 0, lose: 0, tie: 0});
+            rosters[n] = createRoster(n);
+        });
+    });
+}
+
+function createRoster(teamName) {
+    let r = [];
+    for (let i = 1; i <= 15; i++) {
+        let rand = Math.random();
+        let tier = rand > 0.985 ? "SSR" : rand > 0.94 ? "SR" : rand > 0.86 ? "S" : rand > 0.68 ? "A" : rand > 0.45 ? "B" : rand > 0.20 ? "C" : "D";
+        let type = Object.keys(typeBonus)[Math.floor(Math.random()*6)];
+        let base = tierBase[tier];
+        r.push({
+            team: teamName, name: teamName.substring(0,2)+"-P"+i, tier: tier, type: type,
+            con: base * typeBonus[type].con, pow: base * typeBonus[type].pow, eye: base * typeBonus[type].eye, spd: base * typeBonus[type].spd,
+            stamina: 90 + Math.random()*10,
+            restThreshold: 18 + Math.random()*35, // 個人化休假判定 (18%~53%)
+            G:0, PA:0, AB:0, H:0, "2B":0, "3B":0, HR:0, RBI:0, R:0, SB:0, TB:0, SO:0, BB:0, SAC:0, SF:0
+        });
+    }
+    return r;
+}
+
+// 物理打席引擎
+function atBat(p, outs, bases) {
+    p.PA++;
+    let r = Math.random();
+    let fatigue = p.stamina < 25 ? 0.82 : 1.0; // 嚴重疲勞懲罰
+    
+    let bbRate = 0.04 + (p.eye * 0.12);
+    if (r < bbRate) { p.BB++; return "BB"; }
+    
+    // 戰術犧牲打 (機率性)
+    if (outs < 2 && bases[0] && !bases[1] && Math.random() < 0.05) { p.SAC++; return "SAC"; }
+    
+    let soRate = 0.30 - (p.con * 0.20);
+    if (r < bbRate + soRate) { p.SO++; p.AB++; return "OUT"; }
+
+    let hitRate = 0.16 + (p.con * 0.20) * fatigue;
+    if (Math.random() < hitRate) {
+        p.AB++; p.H++;
+        let pwr = p.pow * fatigue;
+        let roll = Math.random();
+        let hrR = 0.02 + (pwr * 0.22);
+        let trR = 0.005 + (p.spd * 0.08);
+        let dbR = 0.12 + (pwr * 0.18);
+
+        if (roll < hrR) { p.HR++; p.TB += 4; return "HR"; }
+        if (roll < hrR + trR) { p["3B"]++; p.TB += 3; return "3B"; }
+        if (roll < hrR + trR + dbR) { p["2B"]++; p.TB += 2; return "2B"; }
+        p.TB += 1; 
+        if (Math.random() < (p.spd * 0.18)) p.SB++; 
+        return "1B";
+    }
+    p.AB++;
+    if (outs < 2 && bases[2] && Math.random() < 0.15) { p.SF++; p.AB--; return "SF"; }
+    return "OUT";
+}
+
+function halfInning(lineup, startIndex) {
+    let outs = 0, runs = 0;
+    let bases = [null, null, null];
+    let i = startIndex;
+    while (outs < 3) {
+        let p = lineup[i];
+        let res = atBat(p, outs, bases);
+        if (res === "OUT") { outs++; }
+        else if (res === "SAC") { if (bases[1]) bases[2] = bases[1]; if (bases[0]) bases[1] = bases[0]; bases[0] = null; outs++; }
+        else if (res === "SF") { runs++; if (bases[2]) { bases[2].R++; p.RBI++; } bases[2] = null; outs++; }
+        else if (res === "BB" || res === "1B") {
+            if (bases[2] && (res === "1B" || (bases[0] && bases[1]))) { bases[2].R++; p.RBI++; runs++; bases[2] = null; }
+            if (bases[1] && (res === "1B" || bases[0])) { bases[2] = bases[1]; bases[1] = null; }
+            if (bases[0]) { bases[1] = bases[0]; }
+            bases[0] = p;
+        }
+        else if (res === "2B") {
+            [2, 1, 0].forEach(idx => { if (bases[idx]) { if (idx >= 1 || Math.random() < 0.7) { bases[idx].R++; p.RBI++; runs++; bases[idx] = null; } else { bases[2] = bases[idx]; bases[idx] = null; } } });
+            bases[1] = p;
+        }
+        else if (res === "3B") { [0, 1, 2].forEach(idx => { if (bases[idx]) { bases[idx].R++; p.RBI++; runs++; bases[idx] = null; } }); bases[2] = p; }
+        else if (res === "HR") {
+            let count = 1; bases.forEach(b => { if (b) { b.R++; p.RBI++; count++; } });
+            p.R++; p.RBI++; runs += count; bases = [null, null, null];
+        }
+        i = (i + 1) % lineup.length;
+    }
+    return { runs, nextIndex: i };
+}
+
+function getLineup(teamName) {
+    let r = rosters[teamName];
+    let sorted = [...r].sort((a,b) => {
+        let aF = a.stamina < (a.restThreshold + (Math.random()*10 - 5));
+        let bF = b.stamina < (b.restThreshold + (Math.random()*10 - 5));
+        if (Math.random() < 0.015) aF = true; // 隨機輪休機率
+        if (aF !== bF) return aF ? 1 : -1;
+        return tierBase[b.tier] - tierBase[a.tier];
+    });
+    let starters = sorted.slice(0, 9);
+    let bench = sorted.slice(9);
+    starters.forEach(p => {
+        let loss = ["SSR","SR","S"].includes(p.tier) ? (3.5 + Math.random()*2.5) : (6 + Math.random()*3);
+        p.stamina = Math.max(0, p.stamina - loss);
+    });
+    bench.forEach(p => p.stamina = Math.min(100, p.stamina + 35));
+    return starters;
+}
+
+function playGame(t1, t2) {
+    let l1 = getLineup(t1.name); let l2 = getLineup(t2.name);
+    l1.forEach(p => p.G++); l2.forEach(p => p.G++);
+    let s1 = 0, s2 = 0, idx1 = 0, idx2 = 0;
+    for (let inn = 1; inn <= 9; inn++) {
+        let r1 = halfInning(l1, idx1); s1 += r1.runs; idx1 = r1.nextIndex;
+        let r2 = halfInning(l2, idx2); s2 += r2.runs; idx2 = r2.nextIndex;
+    }
+    if (s1 > s2) { t1.win++; t2.lose++; } else if (s2 > s1) { t2.win++; t1.lose++; } else { t1.tie++; t2.tie++; }
+}
+
+function simulateGame() {
+    let pool = teams.filter(t => (t.win+t.lose+t.tie) < MAX_GAMES);
+    if (pool.length < 2) return false;
+    let i1 = Math.floor(Math.random()*pool.length);
+    let i2 = (i1 + 1 + Math.floor(Math.random()*(pool.length-1))) % pool.length;
+    playGame(pool[i1], pool[i2]); render();
+    return true;
+}
+function simulateDay() { for(let i=0; i<10; i++) simulateGame(); }
+function simulateSeason(d) { for(let i=0; i<d*10; i++) simulateGame(); }
+function simulateComplete() { while(simulateGame()){} alert("例行賽 150 場模擬結束！"); }
+
+let sortKey = "OPS", sortAsc = false;
+function sortTable(k) { if(sortKey===k) sortAsc=!sortAsc; else {sortKey=k; sortAsc=false;} render(); }
+
+function render() {
+    let sHtml = "";
+    Object.keys(divisions).forEach(dn => {
+        let g = teams.filter(t => t.division === dn).sort((a,b) => (b.win/(b.win+b.lose||1)) - (a.win/(a.win+a.lose||1)));
+        sHtml += `<tr><th colspan="7" class="div-header">${dn}</th></tr><tr><th>球隊</th><th>G</th><th>W</th><th>L</th><th>T</th><th>PCT</th><th>GB</th></tr>`;
+        let leader = g[0];
+        g.forEach(t => {
+            let pct = (t.win+t.lose) ? (t.win/(t.win+t.lose)).toFixed(3) : ".000";
+            let gb = ((leader.win - t.win) + (t.lose - leader.lose)) / 2;
+            sHtml += `<tr><td>${t.name}</td><td>${t.win+t.lose+t.tie}</td><td>${t.win}</td><td>${t.lose}</td><td>${t.tie}</td><td>${pct}</td><td>${gb||"-"}</td></tr>`;
+        });
+    });
+    document.getElementById("standings").innerHTML = sHtml;
+
+    let all = []; Object.values(rosters).forEach(r => all.push(...r));
+    all.forEach(p => {
+        p.AVG = p.AB ? p.H/p.AB : 0;
+        p.OBP = (p.AB+p.BB+p.SF) ? (p.H+p.BB)/(p.AB+p.BB+p.SF) : 0;
+        p.SLG = p.AB ? p.TB/p.AB : 0;
+        p.OPS = p.OBP + p.SLG;
+    });
+    all.sort((a,b) => sortAsc ? a[sortKey]-b[sortKey] : b[sortKey]-a[sortKey]);
+
+    let cols = ["G","PA","AB","H","2B","3B","HR","RBI","R","SB","TB","SO","BB","SAC","SF","AVG","OBP","SLG","OPS"];
+    let hHtml = `<tr><th>球隊</th><th>階級</th><th>姓名</th><th>Stamina</th>` + cols.map(c => `<th onclick="sortTable('${c}')">${c}</th>`).join('') + `</tr>`;
+    all.forEach(p => {
+        let barColor = p.stamina > 60 ? "#27ae60" : p.stamina > 30 ? "#f1c40f" : "#e74c3c";
+        hHtml += `<tr><td>${p.team}</td><td class="tier-${p.tier}">${p.tier}</td><td>${p.name}</td>
+            <td><div class="stamina-bar-bg"><div class="stamina-bar-fg" style="width:${p.stamina}%; background:${barColor};"></div></div></td>
+            <td>${p.G}</td><td>${p.PA}</td><td>${p.AB}</td><td>${p.H}</td><td>${p["2B"]}</td><td>${p["3B"]}</td><td>${p.HR}</td>
+            <td>${p.RBI}</td><td>${p.R}</td><td>${p.SB}</td><td>${p.TB}</td><td>${p.SO}</td><td>${p.BB}</td><td>${p.SAC}</td><td>${p.SF}</td>
+            <td>${p.AVG.toFixed(3)}</td><td>${p.OBP.toFixed(3)}</td><td>${p.SLG.toFixed(3)}</td><td>${p.OPS.toFixed(3)}</td></tr>`;
+    });
+    document.getElementById("hitters").innerHTML = hHtml;
+}
+
+function resetSeason() { if(confirm("確定重置整個 150 場賽季？")) { initData(); render(); } }
+function saveData() { localStorage.setItem("v461_data", JSON.stringify({teams, rosters})); alert("賽季進度存檔成功"); }
+function loadData() { let d = JSON.parse(localStorage.getItem("v461_data")); if(d){ teams=d.teams; rosters=d.rosters; render(); alert("賽季進度讀取成功"); } }
+
+initData();
+render();
+</script>
 </body>
 </html>
