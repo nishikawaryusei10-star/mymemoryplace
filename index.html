@@ -198,7 +198,22 @@ function simulateGame() {
     playGame(pool[i1], pool[i2]); render();
     return true;
 }
-function simulateDay() { for(let i=0; i<10; i++) simulateGame(); }
+function simulateDay() {
+    let pool = teams.filter(t => (t.win + t.lose + t.tie) < MAX_GAMES);
+
+    // 打亂順序
+    for (let i = pool.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    // 兩兩配對（每隊一天最多1場）
+    for (let i = 0; i < pool.length - 1; i += 2) {
+        playGame(pool[i], pool[i + 1]);
+    }
+
+    render();
+}
 function simulateSeason(d) { for(let i=0; i<d*10; i++) simulateGame(); }
 function simulateComplete() { while(simulateGame()){} alert("例行賽 150 場模擬結束！"); }
 
