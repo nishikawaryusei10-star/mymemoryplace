@@ -115,8 +115,8 @@ function atBat(p, outs, bases) {
         let pwr = p.pow * fatigue;
         let roll = Math.random();
         let hrR = 0.02 + (pwr * 0.22);
-        let trR = 0.005 + (p.spd * 0.08);
-        let dbR = 0.12 + (pwr * 0.18);
+        let trR = 0.003 + (p.spd * 0.029);
+        let dbR = 0.10 + (pwr * 0.16);
 
         if (roll < hrR) { p.HR++; p.TB += 4; return "HR"; }
         if (roll < hrR + trR) { p["3B"]++; p.TB += 3; return "3B"; }
@@ -163,8 +163,8 @@ function halfInning(lineup, startIndex) {
 function getLineup(teamName) {
     let r = rosters[teamName];
     let sorted = [...r].sort((a,b) => {
-        let aF = a.stamina < (a.restThreshold + (Math.random()*10 - 5));
-        let bF = b.stamina < (b.restThreshold + (Math.random()*10 - 5));
+        let aF = a.stamina < a.restThreshold && Math.random() < 0.35;
+        let bF = b.stamina < b.restThreshold && Math.random() < 0.35;
         if (Math.random() < 0.015) aF = true; // 隨機輪休機率
         if (aF !== bF) return aF ? 1 : -1;
         return tierBase[b.tier] - tierBase[a.tier];
